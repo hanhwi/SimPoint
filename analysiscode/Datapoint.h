@@ -83,6 +83,7 @@
 
 #include <vector>
 #include <cstdio>
+#include <iosfwd>
 
 using namespace std;
 
