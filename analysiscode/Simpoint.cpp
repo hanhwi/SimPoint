@@ -175,7 +175,7 @@ void Simpoint::loadData() {
                         options.loadProjMatrixTxtFmtName);
                 projection = new Dataset;
                 ifstream input(options.loadProjMatrixTxtFmtName.c_str());
-                Utilities::check(input, "Simpoint::loadData(): could not open file " +
+                Utilities::check(input.is_open(), "Simpoint::loadData(): could not open file " +
                                         options.loadProjMatrixTxtFmtName);
                 projection->read(input);
                 input.close();
@@ -191,7 +191,7 @@ void Simpoint::loadData() {
                         options.loadProjMatrixBinFmtName);
                 projection = new Dataset;
                 ifstream input(options.loadProjMatrixBinFmtName.c_str());
-                Utilities::check(input, "Simpoint::loadData(): could not open file " +
+                Utilities::check(input.is_open(), "Simpoint::loadData(): could not open file " +
                                         options.loadProjMatrixBinFmtName);
                 projection->readBinary(input);
                 input.close();
@@ -213,7 +213,7 @@ void Simpoint::loadData() {
                 Logger::log() << "  Saving the projection matrix to file '" 
                     << options.saveProjMatrixTxtFmtName << "'\n";
                 ofstream output(options.saveProjMatrixTxtFmtName.c_str());
-                Utilities::check(output, "Simpoint::loadData(): could not open file " +
+                Utilities::check(output.is_open(), "Simpoint::loadData(): could not open file " +
                                         options.saveProjMatrixTxtFmtName);
                 projection->write(output);
                 output.close();
@@ -223,7 +223,7 @@ void Simpoint::loadData() {
                 Logger::log() << "  Saving the projection matrix to binary file '" 
                     << options.saveProjMatrixBinFmtName << "'\n";
                 ofstream output(options.saveProjMatrixBinFmtName.c_str());
-                Utilities::check(output, "Simpoint::loadData(): could not open file " +
+                Utilities::check(output.is_open(), "Simpoint::loadData(): could not open file " +
                                         options.saveProjMatrixBinFmtName);
                 projection->writeBinary(output);
                 output.close();
@@ -249,7 +249,7 @@ Dataset *Simpoint::loadInitialCentersFromLabels(const string &file, const Datase
         "Simpoint::loadInitialCentersFromLabels() not regular file: " + file);
     int n = data.numRows(), d = data.numCols();
     ifstream input(file.c_str());
-    Utilities::check(input, 
+    Utilities::check(input.is_open(),
         "Simpoint::loadInitialCentersFromLabels() could not open file " + file);
 
     // load all the labels, find the largest one in the process (this is
@@ -300,7 +300,7 @@ Dataset *Simpoint::loadInitialCenters(int runNumber, int seedNumber) const {
                 options.loadInitialCentersName);
         centers = new Dataset;
         ifstream input(options.loadInitialCentersName.c_str());
-        Utilities::check(input, "Simpoint::loadInitialCenters(): could not open file " +
+        Utilities::check(input.is_open(), "Simpoint::loadInitialCenters(): could not open file " +
                                 options.loadInitialCentersName);
         centers->read(input);
         input.close();
@@ -434,7 +434,7 @@ void Simpoint::applyWeights() {
         Utilities::check(isRegularFile(options.loadVectorWeightsName),
                 "applyWeights() not regular file " + options.loadVectorWeightsName);
         ifstream input(options.loadVectorWeightsName.c_str());
-        Utilities::check(input, "Simpoint::applyWeights(): could not open file " +
+        Utilities::check(input.is_open(), "Simpoint::applyWeights(): could not open file " +
                                 options.loadVectorWeightsName);
         vector<double> weights(wholeDataset->numRows());
         double totalWeight = 0.0;
@@ -462,7 +462,7 @@ void Simpoint::savePreClusteringData() {
         Logger::log() << "  Saving Simpoint-format vector data to text file '" 
             << options.saveVectorsTxtFmtName << "'\n";
         ofstream output(options.saveVectorsTxtFmtName.c_str());
-        Utilities::check(output, "Simpoint::savePreClusteringData(): could not open file " +
+        Utilities::check(output.is_open(), "Simpoint::savePreClusteringData(): could not open file " +
                                 options.saveVectorsTxtFmtName);
         wholeDataset->write(output);
         output.close();
@@ -472,7 +472,7 @@ void Simpoint::savePreClusteringData() {
         Logger::log() << "  Saving Simpoint-format vector data to binary file '" 
             << options.saveVectorsBinFmtName << "'\n";
         ofstream output(options.saveVectorsBinFmtName.c_str());
-        Utilities::check(output, "Simpoint::savePreClusteringData(): could not open file " +
+        Utilities::check(output.is_open(), "Simpoint::savePreClusteringData(): could not open file " +
                                 options.saveVectorsBinFmtName);
         wholeDataset->writeBinary(output);
         output.close();
@@ -483,7 +483,7 @@ void Simpoint::savePreClusteringData() {
             << options.saveVectorWeightsName << "'\n";
 
         ofstream output(options.saveVectorWeightsName.c_str());
-        Utilities::check(output, "Simpoint::saveVectorWeights(): could not open file " +
+        Utilities::check(output.is_open(), "Simpoint::saveVectorWeights(): could not open file " +
                                 options.saveVectorWeightsName);
         output.precision(20);
         for (unsigned int i = 0; i < wholeDataset->numRows(); i++) {
@@ -560,7 +560,7 @@ void Simpoint::saveSimpoints(const string &filename, const vector<bool> &largest
     }
 
     ofstream output(filename.c_str());
-    Utilities::check(output, "Simpoint::saveSimpoints(): could not open file " +
+    Utilities::check(output.is_open(), "Simpoint::saveSimpoints(): could not open file " +
                             filename);
     for (unsigned int i = 0; i < k; i++) {
         if (largestClusters[i]) {
@@ -573,7 +573,7 @@ void Simpoint::saveSimpoints(const string &filename, const vector<bool> &largest
 void Simpoint::saveSimpointWeights(const string &filename, 
         const vector<bool> &largestClusters, const Dataset &centers) {
     ofstream output(filename.c_str());
-    Utilities::check(output, "Simpoint::saveSimpointWeights(): could not open file " +
+    Utilities::check(output.is_open(), "Simpoint::saveSimpointWeights(): could not open file " +
                             filename);
     double sumWeights = 0.0;
     for (unsigned int r = 0; r < centers.numRows(); r++) {
@@ -622,7 +622,7 @@ void Simpoint::savePostClusteringData() {
             }
             Logger::log() << "    Saving initial centers to file '" << name << "'\n";
             ofstream output(name.c_str());
-            Utilities::check(output, "Simpoint::savePostClusteringData(): could not open file " +
+            Utilities::check(output.is_open(), "Simpoint::savePostClusteringData(): could not open file " +
                                     name);
             initialCenters[runNumber]->write(output);
             output.close();
@@ -636,7 +636,7 @@ void Simpoint::savePostClusteringData() {
             }
             Logger::log() << "    Saving final centers to file '" << name << "'\n";
             ofstream output(name.c_str());
-            Utilities::check(output, "Simpoint::savePostClusteringData(): could not open file " +
+            Utilities::check(output.is_open(), "Simpoint::savePostClusteringData(): could not open file " +
                                     name);
             finalCenters[runNumber]->write(output);
             output.close();
@@ -657,7 +657,7 @@ void Simpoint::savePostClusteringData() {
                 << "each input vector to file '" << name << "'\n";
 
             ofstream output(name.c_str());
-            Utilities::check(output, "Simpoint::savePostClusteringData(): could not open file " +
+            Utilities::check(output.is_open(), "Simpoint::savePostClusteringData(): could not open file " +
                                     name);
             for (unsigned int r = 0; r < labels.size(); r++) {
                 /* output the label and the distance from the center of this point */
